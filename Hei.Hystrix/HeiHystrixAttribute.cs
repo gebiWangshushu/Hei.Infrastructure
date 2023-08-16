@@ -71,6 +71,11 @@ namespace Hei.Hystrix
         /// </summary>
         public int CacheTTLMinutes { get; set; } = 0;
 
+        /// <summary>
+        /// 是否全局缓存：是的话所有用户公用一个key
+        /// </summary>
+        public bool CacheGlobal { get; set; } = false;
+
         private static ConcurrentDictionary<MethodInfo, AsyncPolicy> policies = new ConcurrentDictionary<MethodInfo, AsyncPolicy>();
 
         //private static readonly IMemoryCache memoryCache = new MemoryCache(new MemoryCacheOptions());
@@ -165,7 +170,7 @@ namespace Hei.Hystrix
                 //用类名+方法名+参数的下划线连接起来作为缓存key
 
                 var accessor = context.ServiceProvider.Resolve<IHttpContextAccessor>();
-                var userId = accessor?.HttpContext?.UserId();
+                var userId = CacheGlobal ? string.Empty : accessor?.HttpContext?.UserId();
                 string cacheKey = $"Hei:Hystrix:{(userId.IsNotNullOrEmpty() ? userId + ":" : string.Empty)}{context.ServiceMethod?.DeclaringType?.FullName}:{context?.ServiceMethod?.Name}:{CacheAspectUtils.GenerateKey(context.Parameters)}";
 
                 if (CacheType == CacheTypeEnum.MemoryCache)
