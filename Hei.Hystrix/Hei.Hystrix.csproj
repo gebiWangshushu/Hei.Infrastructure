@@ -1,17 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Company></Company>
     <Authors>wangsiheng</Authors>
-    <Version>0.0.1.0</Version>
+    <Version>0.0.1.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <!--<PackageReference Include="AspectCore.Core" Version="2.4.0" />-->
-    <PackageReference Include="AspectCore.Extensions.DependencyInjection" Version="2.4.0" />
+    <!--<PackageReference Include="AspectCore.Extensions.DependencyInjection" Version="2.4.0" />-->
+    
     <!--<PackageReference Include="CSRedisCore" Version="3.8.670" />-->
 
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.1" />
@@ -21,6 +22,14 @@
     <PackageReference Include="StackExchange.Redis" Version="2.6.48" />
     <PackageReference Include="Polly" Version="7.2.3" />
   </ItemGroup>
+  
+    <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
+      
+    </ItemGroup>
+  
+    <ItemGroup Condition=" '$(TargetFramework)' == 'net8.0' ">
+      
+    </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Hei.Infrastructure\Hei.Infrastructure.csproj" />
