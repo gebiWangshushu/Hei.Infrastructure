@@ -18,7 +18,9 @@ namespace DemoApi.Net6.Services
         /// 熔断处理
         /// </summary>
         /// <returns></returns>
-        [HeiHystrix(nameof(MyFallback), EnableCircuitBreaker = true, ExceptionsAllowedBeforeBreaking = 3, MillisecondsOfBreak = 10 * 1000)]
+        //[HeiHystrix(nameof(MyFallback), EnableCircuitBreaker = true, ExceptionsAllowedBeforeBreaking = 3, MillisecondsOfBreak = 10 * 1000)]
+        //只有ArgumentException异常才熔断
+        [HeiHystrix<ArgumentException>(nameof(MyFallback), EnableCircuitBreaker = true, ExceptionsAllowedBeforeBreaking = 3, MillisecondsOfBreak = 10 * 1000)]
         Task CircuitBreaker();
 
         /// <summary>
@@ -34,7 +36,8 @@ namespace DemoApi.Net6.Services
         /// </summary>
         /// <returns></returns>
         //[HeiHystrix(nameof(Retry), MaxRetryTimes = 1, RetryIntervalMilliseconds = 0)]
-        [HeiHystrix(nameof(MyFallback), MaxRetryTimes = 1, RetryIntervalMilliseconds = 4 * 1000)]
+        //[HeiHystrix(nameof(MyFallback), MaxRetryTimes = 2, RetryIntervalMilliseconds = 4 * 1000)]
+        [HeiHystrix<ArgumentException>(nameof(MyFallback), MaxRetryTimes = 1, RetryIntervalMilliseconds = 4 * 1000)] //只有ArgumentException异常才重试
         Task<string> Retry();
 
         /// <summary>
@@ -90,9 +93,18 @@ namespace DemoApi.Net6.Services
         public async Task<string> Retry()
         {
             Console.WriteLine("执行方法Retry");
-            throw new Exception("重试异常");
+            //throw new Exception("重试异常");
+            throw new ArgumentException("ArgumentException重试异常");
+
             return "执行方法Retry";
         }
+
+        //public async Task<string> Retry()
+        //{
+        //    Console.WriteLine("执行方法Retry");
+        //    throw new ArgumentException("重试异常");
+        //    return "执行方法Retry";
+        //}
 
         public void CacheVoid()
         {

@@ -7,6 +7,8 @@
     <Company></Company>
     <Authors>wangsiheng</Authors>
     <Version>0.0.1.1</Version>
+    <LangVersion>11.0</LangVersion>
+
   </PropertyGroup>
 
   <ItemGroup>
