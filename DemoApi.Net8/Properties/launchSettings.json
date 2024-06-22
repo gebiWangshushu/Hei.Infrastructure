@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "http": {
+    "DemoApi.Net8": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",

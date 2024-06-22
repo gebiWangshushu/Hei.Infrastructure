@@ -10,8 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!--<PackageReference Include="AspectCore.Core" Version="2.4.0" />-->
-    <!--<PackageReference Include="AspectCore.Extensions.DependencyInjection" Version="2.4.0" />-->
+    <PackageReference Include="AspectCore.Core" Version="2.4.0" />
+    <PackageReference Include="AspectCore.Extensions.DependencyInjection" Version="2.4.0" />
     
     <!--<PackageReference Include="CSRedisCore" Version="3.8.670" />-->
 
