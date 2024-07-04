@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Hei.Infrastructure;
 using DemoApi.Net6.Services;
 using Microsoft.Extensions.Caching.Memory;
+using Hei.Hystrix;
 
 namespace DemoApi.Net6.Controllers
 {
@@ -53,7 +54,13 @@ namespace DemoApi.Net6.Controllers
         [HttpGet]
         public async Task<IActionResult> Retry()
         {
-            await _userService.Retry();
+            //await _userService.Retry();
+
+            await _userService.TaskRetry().RetryV1(5, 3000, typeof(Exception));
+
+            //var func = (_userService.TaskRetry()).RetryV1(5, 3000, typeof(Exception)) ;
+            //await func.RetryV2(5, 3000, typeof(Exception));
+
             return Success("Retry");
         }
 

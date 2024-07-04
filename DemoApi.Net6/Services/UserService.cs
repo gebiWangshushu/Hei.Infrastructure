@@ -40,6 +40,8 @@ namespace DemoApi.Net6.Services
         [HeiHystrix<ArgumentException>(nameof(MyFallback), MaxRetryTimes = 1, RetryIntervalMilliseconds = 4 * 1000)] //只有ArgumentException异常才重试
         Task<string> Retry();
 
+        Task<string> TaskRetry();
+
         /// <summary>
         /// 缓存
         /// </summary>
@@ -90,11 +92,19 @@ namespace DemoApi.Net6.Services
             return "执行timeOut方法";
         }
 
+        public async Task<string> TaskRetry()
+        {
+            Console.WriteLine("执行方法Retry");
+            throw new Exception("重试异常");
+            //throw new ArgumentException("ArgumentException重试异常");
+
+            return "执行方法Retry";
+        }
+
         public async Task<string> Retry()
         {
             Console.WriteLine("执行方法Retry");
-            //throw new Exception("重试异常");
-            throw new ArgumentException("ArgumentException重试异常");
+            throw new Exception("重试异常");
 
             return "执行方法Retry";
         }
