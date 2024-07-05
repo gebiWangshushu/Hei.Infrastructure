@@ -50,7 +50,11 @@ namespace Hei.Hystrix
             }
 
             var retryPolicy = Policy
-                .Handle<Exception>(ex => ex.GetType() == exceptionType || ex.GetType().IsSubclassOf(exceptionType))
+                .Handle<Exception>(ex =>
+                {
+                    var match = ex.GetType() == exceptionType;
+                    return match;
+                })
                 .WaitAndRetryAsync(retryCount, _ => TimeSpan.FromMilliseconds(retryIntervalMilliseconds));
 
             return await retryPolicy.ExecuteAsync(taskFunc);

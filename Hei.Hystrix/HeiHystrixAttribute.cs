@@ -18,16 +18,18 @@ using System.Threading;
 
 namespace Hei.Hystrix
 {
-    public class HeiHystrixAttribute : HeiHystrixAttribute<Exception>
-    {
-        public HeiHystrixAttribute(string fallBackMethod = null) : base(fallBackMethod)
-        {
-        }
-    }
+    //public class HeiHystrixAttribute : HeiHystrixAttribute
+    //{
+    //    public HeiHystrixAttribute(string fallBackMethod = null) : base(fallBackMethod)
+    //    {
+    //    }
+    //}
 
     [AttributeUsage(AttributeTargets.Method)]
-    public class HeiHystrixAttribute<TException> : AbstractInterceptorAttribute where TException : Exception
+    public class HeiHystrixAttribute : AbstractInterceptorAttribute
     {
+        public Type OnError { get; set; }
+
         /// <summary>
         /// 最多重试几次，如果为0则不重试
         /// </summary>
@@ -117,12 +119,30 @@ namespace Hei.Hystrix
             {
                 if (policy == null)
                 {
+                    if (OnError == null)
+                    {
+                        OnError = typeof(Exception);
+                    }
+
                     policy = Policy.NoOpAsync();//创建一个空的Policy
                     if (EnableCircuitBreaker)
                     {
                         // ExceptionsAllowedBeforeBreaking：Break the circuit after the specified number of consecutive exceptions，只在第一次运行出现这么多次，后面每出现一次就熔断
                         // MillisecondsOfBreak： and keep circuit broken for the specified duration.
-                        policy = policy.WrapAsync(Policy.Handle<TException>().CircuitBreakerAsync(ExceptionsAllowedBeforeBreaking, TimeSpan.FromMilliseconds(MillisecondsOfBreak)));
+                        //policy = policy.WrapAsync(Policy.Handle<Exception>()
+                        //policy = policy.WrapAsync(Policy.Handle<Exception>(ex => ex.GetType() == OnError)
+                        policy = policy.WrapAsync(Policy.Handle<Exception>(ex =>
+                        {
+                            if (OnError == typeof(Exception))
+                            {
+                                return true;
+                            }
+                            else
+                            {
+                                return (ex.GetType() == OnError || ex.GetType().IsSubclassOf(OnError));
+                            }
+                        })
+                        .CircuitBreakerAsync(ExceptionsAllowedBeforeBreaking, TimeSpan.FromMilliseconds(MillisecondsOfBreak)));
                     }
                     if (TimeOutMilliseconds > 0)
                     {
@@ -133,7 +153,17 @@ namespace Hei.Hystrix
                     {
                         //执行正常逻辑一次，然后执行重试：MaxRetryTimes次，最后执行Fallback
                         //比如MaxRetryTimes 配置1，则为：1+1+ 1(Fallback)=3
-                        policy = policy.WrapAsync(Policy.Handle<TException>().WaitAndRetryAsync(MaxRetryTimes, i => TimeSpan.FromMilliseconds(RetryIntervalMilliseconds)));
+                        policy = policy.WrapAsync(Policy.Handle<Exception>(ex =>
+                        {
+                            if (OnError == typeof(Exception))
+                            {
+                                return true;
+                            }
+                            else
+                            {
+                                return (ex.GetType() == OnError || ex.GetType().IsSubclassOf(OnError));
+                            }
+                        }).WaitAndRetryAsync(MaxRetryTimes, i => TimeSpan.FromMilliseconds(RetryIntervalMilliseconds)));
                     }
 
                     var policyFallBack = Policy

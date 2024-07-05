@@ -54,12 +54,12 @@ namespace DemoApi.Net6.Controllers
         [HttpGet]
         public async Task<IActionResult> Retry()
         {
-            //await _userService.Retry();
+            await _userService.Retry();
 
-            await _userService.TaskRetry().RetryV1(5, 3000, typeof(Exception));
+            ////await _userService.TaskRetry().RetryV1(5, 3000, typeof(Exception));
 
-            //var func = (_userService.TaskRetry()).RetryV1(5, 3000, typeof(Exception)) ;
-            //await func.RetryV2(5, 3000, typeof(Exception));
+            //var func = () => _userService.TaskRetry();
+            //await func.RetryV2(5, 3000, typeof(ArgumentException));
 
             return Success("Retry");
         }
