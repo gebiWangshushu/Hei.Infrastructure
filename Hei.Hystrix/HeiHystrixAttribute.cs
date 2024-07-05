@@ -36,9 +36,9 @@ namespace Hei.Hystrix
         public int MaxRetryTimes { get; set; } = 0;
 
         /// <summary>
-        /// 重试间隔的毫秒数
+        /// 重试间隔的秒数
         /// </summary>
-        public int RetryIntervalMilliseconds { get; set; } = 100;
+        public int RetryIntervalSeconds { get; set; } = 1;
 
         /// <summary>
         /// 是否启用熔断
@@ -51,14 +51,14 @@ namespace Hei.Hystrix
         public int ExceptionsAllowedBeforeBreaking { get; set; } = 3;
 
         /// <summary>
-        /// 熔断多长时间（毫秒）
+        /// 熔断多长时间（秒）
         /// </summary>
-        public int MillisecondsOfBreak { get; set; } = 1000;
+        public int SecondsOfBreak { get; set; } = 1;
 
         /// <summary>
-        /// 执行超过多少毫秒则认为超时（0表示不检测超时）
+        /// 执行超过多少秒则认为超时（0表示不检测超时）
         /// </summary>
-        public int TimeOutMilliseconds { get; set; } = 0;
+        public int TimeOutSeconds { get; set; } = 0;
 
         /// <summary>
         /// 降级方法名
@@ -142,12 +142,12 @@ namespace Hei.Hystrix
                                 return (ex.GetType() == OnError || ex.GetType().IsSubclassOf(OnError));
                             }
                         })
-                        .CircuitBreakerAsync(ExceptionsAllowedBeforeBreaking, TimeSpan.FromMilliseconds(MillisecondsOfBreak)));
+                        .CircuitBreakerAsync(ExceptionsAllowedBeforeBreaking, TimeSpan.FromSeconds(SecondsOfBreak)));
                     }
-                    if (TimeOutMilliseconds > 0)
+                    if (TimeOutSeconds > 0)
                     {
                         //超时执行Fallback逻辑
-                        policy = policy.WrapAsync(Policy.TimeoutAsync(() => TimeSpan.FromMilliseconds(TimeOutMilliseconds), Polly.Timeout.TimeoutStrategy.Pessimistic));
+                        policy = policy.WrapAsync(Policy.TimeoutAsync(() => TimeSpan.FromMilliseconds(TimeOutSeconds), Polly.Timeout.TimeoutStrategy.Pessimistic));
                     }
                     if (MaxRetryTimes > 0)
                     {
@@ -163,7 +163,7 @@ namespace Hei.Hystrix
                             {
                                 return (ex.GetType() == OnError || ex.GetType().IsSubclassOf(OnError));
                             }
-                        }).WaitAndRetryAsync(MaxRetryTimes, i => TimeSpan.FromMilliseconds(RetryIntervalMilliseconds)));
+                        }).WaitAndRetryAsync(MaxRetryTimes, i => TimeSpan.FromSeconds(RetryIntervalSeconds)));
                     }
 
                     var policyFallBack = Policy
