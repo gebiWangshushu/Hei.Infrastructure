@@ -24,6 +24,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwagger();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICustomService, CustomService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 
 //builder.Services.AddMemoryCache();
 //builder.Services.ConfigureDynamicProxy();

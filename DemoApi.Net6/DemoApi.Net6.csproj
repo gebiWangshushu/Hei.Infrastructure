@@ -27,6 +27,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Hei.Hystrix\Hei.Hystrix.csproj" />
     <ProjectReference Include="..\Hei.Infrastructure\Hei.Infrastructure.csproj" />
+    <InternalsVisibleTo Include="DemoApi.UnitTest" />
+
   </ItemGroup>
 
   <ItemGroup>

@@ -131,18 +131,7 @@ namespace Hei.Hystrix
                         // MillisecondsOfBreak： and keep circuit broken for the specified duration.
                         //policy = policy.WrapAsync(Policy.Handle<Exception>()
                         //policy = policy.WrapAsync(Policy.Handle<Exception>(ex => ex.GetType() == OnError)
-                        policy = policy.WrapAsync(Policy.Handle<Exception>(ex =>
-                        {
-                            if (OnError == typeof(Exception))
-                            {
-                                return true;
-                            }
-                            else
-                            {
-                                return (ex.GetType() == OnError || ex.GetType().IsSubclassOf(OnError));
-                            }
-                        })
-                        .CircuitBreakerAsync(ExceptionsAllowedBeforeBreaking, TimeSpan.FromSeconds(SecondsOfBreak)));
+                        policy = policy.WrapAsync(PollyPolicy.CircuitBreaker(ExceptionsAllowedBeforeBreaking, SecondsOfBreak, OnError));
                     }
                     if (TimeOutSeconds > 0)
                     {
@@ -153,17 +142,7 @@ namespace Hei.Hystrix
                     {
                         //执行正常逻辑一次，然后执行重试：MaxRetryTimes次，最后执行Fallback
                         //比如MaxRetryTimes 配置1，则为：1+1+ 1(Fallback)=3
-                        policy = policy.WrapAsync(Policy.Handle<Exception>(ex =>
-                        {
-                            if (OnError == typeof(Exception))
-                            {
-                                return true;
-                            }
-                            else
-                            {
-                                return (ex.GetType() == OnError || ex.GetType().IsSubclassOf(OnError));
-                            }
-                        }).WaitAndRetryAsync(MaxRetryTimes, i => TimeSpan.FromSeconds(RetryIntervalSeconds)));
+                        policy = policy.WrapAsync(PollyPolicy.Retry(MaxRetryTimes, RetryIntervalSeconds, OnError));
                     }
 
                     var policyFallBack = Policy

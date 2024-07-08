@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoApi.Net6", "DemoApi.Net
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hei.Hystrix", "Hei.Hystrix\Hei.Hystrix.csproj", "{E5011020-8A9C-4FBA-9130-121928DEF0D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoApi.Net8", "DemoApi.Net8\DemoApi.Net8.csproj", "{7DD3A7FE-ED23-4915-981E-41D4E02792E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoApi.Net8", "DemoApi.Net8\DemoApi.Net8.csproj", "{7DD3A7FE-ED23-4915-981E-41D4E02792E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoApi.UnitTest", "DemoApi.UnitTest\DemoApi.UnitTest.csproj", "{EEF87F10-98CE-4347-94BA-E5F5DD5AF02C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{7DD3A7FE-ED23-4915-981E-41D4E02792E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7DD3A7FE-ED23-4915-981E-41D4E02792E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7DD3A7FE-ED23-4915-981E-41D4E02792E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEF87F10-98CE-4347-94BA-E5F5DD5AF02C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEF87F10-98CE-4347-94BA-E5F5DD5AF02C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEF87F10-98CE-4347-94BA-E5F5DD5AF02C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEF87F10-98CE-4347-94BA-E5F5DD5AF02C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
